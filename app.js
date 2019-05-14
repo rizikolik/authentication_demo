@@ -28,7 +28,8 @@ app.get("/",(req,res)=>{
     res.render("home");
 });
 
-app.get("/secret",(req,res)=>{
+app.get("/secret",isLoggedIn,(req,res)=>{
+    
      res.render("secret")
 });
 
@@ -64,7 +65,23 @@ app.post("/login",passport.authenticate("local",{
 }),(req,res)=>{
     
     
-})
+});
+/// log out route
+app.get("/logout",(req,res)=>{
+    req.logout();
+    res.redirect("/")
+});
+
+
+/*================
+Middleware
+================*/
+function isLoggedIn(req,res,next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+   res.redirect("/login") 
+}
 
      /*===========
       SERVER LİSTEN
